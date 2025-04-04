@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  frontend:
+    build: ./frontend
+    ports:
+      - "3000:3000"
+    depends_on:
+      - backend
+    environment:
+      - REACT_APP_API_URL=http://localhost:5000
+
+  backend:
+    build: ./backend
+    ports:
+      - "5000:5000"
+    depends_on:
+      - mongo
+      - flask-api
+    environment:
+      - MONGO_URI=mongodb://mongo:27017/cybersecuritydb
+      - FLASK_API_URL=http://flask-api:5001
+
+  flask-api:
+    build: ./flask-api
+    ports:
+      - "5001:5001"
+
+  mongo:
+    image: mongo:5
+    ports:
+      - "27017:27017"
+    volumes:
+      - mongo-data:/data/db
+
+volumes:
+  mongo-data:
