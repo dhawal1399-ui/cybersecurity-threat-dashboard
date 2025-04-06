@@ -4,22 +4,35 @@ import numpy as np
 
 app = Flask(__name__)
 
-# Load the pre-trained ML model (for demo, we'll use a simple rule-based function)
+# Simple rule-based system to predict maliciousness (example)
 def predict_threat(ip_or_url):
-    if "malicious" in ip_or_url:  # Dummy rule: If "malicious" is in URL/IP, classify as malicious
+    if "malicious" in ip_or_url:  # Dummy rule: If "malicious" is in the URL/IP, classify as malicious
         return {"score": 0.9, "status": "malicious"}
     else:
         return {"score": 0.1, "status": "safe"}
 
-@app.route("/predict", methods=["POST"])
+# from flask import Flask, request, jsonify
+
+# app = Flask(__name__)
+
+@app.route('/predict', methods=['POST'])
 def predict():
-    data = request.json
-    ip_or_url = data.get("input")
-    if not ip_or_url:
-        return jsonify({"error": "Invalid input"}), 400
+    data = request.get_json()
+    input_value = data.get('input', '')
 
-    prediction = predict_threat(ip_or_url)
-    return jsonify(prediction)
+    result = {
+        "input": input_value,
+        "status": "malicious" if "malicious" in input_value else "safe",
+        "score": 0.9 if "malicious" in input_value else 0.1
+    }
 
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port=5001, debug=True)
+    return jsonify(result)
+
+if __name__ == '__main__':
+    app.run(host='127.0.0.1', port=5000, debug=True)
+
+
+
+
+
+

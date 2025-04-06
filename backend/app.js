@@ -17,4 +17,11 @@ mongoose.connect(process.env.MONGO_URI)
 app.use("/api/threats", require("./routes/threatRoutes"));
 app.use("/api/auth", require("./routes/authRoutes"));
 
+const threatsRoute = require('./routes/threats');
+app.use('/api/threats', threatsRoute);
+
+const authRoutes = require('./routes/auth');
+app.use('/api', authRoutes);
+
+
 module.exports = app;
